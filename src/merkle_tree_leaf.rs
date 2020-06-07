@@ -26,9 +26,9 @@ pub enum Error {
 }
 
 pub struct TimestampedEntryData {
-    pub Subject: Vec<String>,
-    pub Alternate: Vec<String>,
-    pub Timestamp: u64,
+    pub subject: Vec<String>,
+    pub alternate: Vec<String>,
+    pub timestamp: u64,
 }
 
 fn err_invalid() -> Error {
@@ -94,9 +94,9 @@ impl TimestampedEntryData {
                     .map(|x| String::from(AsRef::<str>::as_ref(&x)))
                     .collect();
                 Ok(TimestampedEntryData {
-                    Timestamp: timestamp,
-                    Subject: sn,
-                    Alternate: [].to_vec(),
+                    timestamp: timestamp,
+                    subject: sn,
+                    alternate: [].to_vec(),
                 })
             }
             Err(e) => Err(e),

@@ -14,5 +14,5 @@ fn main() {
         }
     };
 
-    println!("common names in cert: {:?}", tsedat.Subject);
+    println!("common names in cert: {:?}", tsedat.subject);
 }
