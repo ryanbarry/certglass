@@ -1,8 +1,9 @@
 fn main() {
     let leafinputdat = include_bytes!("../lets_encrypt_ct_leaf2.dat");
-    let leafextradat = include_bytes!("../lets_encrypt_ct_leaf2extra.dat");
 
-    let leaf = match ctclient::internal::Leaf::from_raw(leafinputdat, leafextradat) {
+    // giving empty "extra_data" since that holds the cert chain
+    // https://tools.ietf.org/html/rfc6962#section-4.6
+    let leaf = match ctclient::internal::Leaf::from_raw(leafinputdat, &[0 as u8; 3]) {
         Ok(l) => l,
         Err(e) => {
             println!("error parsing from raw: {}", e);
