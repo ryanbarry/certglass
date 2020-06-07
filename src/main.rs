@@ -1,9 +1,34 @@
-fn main() {
-    let leafinputdat = include_bytes!("../lets_encrypt_ct_leaf2.dat");
+mod merkle_tree_leaf;
 
-    // giving empty "extra_data" since that holds the cert chain
-    // https://tools.ietf.org/html/rfc6962#section-4.6
-    let leaf = match ctclient::internal::Leaf::from_raw(leafinputdat, &[0 as u8; 3]) {
+use merkle_tree_leaf::cert_from_leaf;
+
+fn main() {
+    let leafinputdat = include_bytes!("../lets_encrypt_ct_leaf1.dat");
+    let leafextradat = include_bytes!("../lets_encrypt_ct_leaf1extra.dat");
+
+    let cert = match cert_from_leaf(leafinputdat, leafextradat) {
+        Ok(c) => c,
+        Err(e) => {
+            println!("error parsing cert from MerkleTreeLeaf: {:?}", e);
+            return;
+        }
+    };
+
+    println!(
+        "common names in cert: {:?}",
+        ctclient::certutils::get_common_names(&cert).unwrap()
+    );
+    println!(
+        "signature alg: {}\nsignature_len: {}",
+        cert.signature_algorithm()
+            .object()
+            .nid()
+            .short_name()
+            .unwrap(),
+        cert.signature().len()
+    );
+
+    let leaf = match ctclient::internal::Leaf::from_raw(leafinputdat, leafextradat) {
         Ok(l) => l,
         Err(e) => {
             println!("error parsing from raw: {}", e);
