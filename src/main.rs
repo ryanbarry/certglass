@@ -14,5 +14,13 @@ fn main() {
         }
     };
 
+    let parsedtime = chrono::naive::NaiveDateTime::from_timestamp(
+        (tsedat.timestamp / 1000) as i64,
+        (tsedat.timestamp % 1000 * 1000000) as u32,
+    );
+
     println!("common names in cert: {:?}", tsedat.subject);
+    println!("alternate names     : {:?}", tsedat.alternate);
+    println!("timestamp           : {}", tsedat.timestamp);
+    println!("parsed timestamp    : {}", parsedtime);
 }
