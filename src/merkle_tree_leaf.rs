@@ -93,10 +93,31 @@ impl TimestampedEntryData {
                     .filter_map(|x| x.ok())
                     .map(|x| String::from(AsRef::<str>::as_ref(&x)))
                     .collect();
+
+                let an: Vec<String> = if let Some(san) = cert.subject_alt_names() {
+                    san.iter()
+                        .filter_map(|x| {
+                            if let Some(dns) = x.dnsname() {
+                                Some(String::from(dns))
+                            } else if let Some(uri) = x.uri() {
+                                Some(String::from(uri))
+                            }
+                            /* else if let Some(ip) = x.ipaddress() {
+                                Some(String::from(ip))
+                            }*/
+                            else {
+                                None
+                            }
+                        })
+                        .collect()
+                } else {
+                    [].to_vec()
+                };
+
                 Ok(TimestampedEntryData {
                     timestamp: timestamp,
                     subject: sn,
-                    alternate: [].to_vec(),
+                    alternate: an,
                 })
             }
             Err(e) => Err(e),
