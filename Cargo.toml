@@ -7,7 +7,7 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-openssl = "0.10.24"
+openssl = "0.10.32"
 chrono = "0.4.11"
 reqwest = { version = "0.10.6", features = ["json", "gzip", "blocking"] }
 serde = { version = "1.0", features = ["derive"] }
